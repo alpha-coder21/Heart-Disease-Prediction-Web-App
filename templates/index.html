@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f7f7f7;
+        }
+        .container {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            background: #fff;
+            padding: 32px 24px;
+            max-width: 480px;
+            width: 100%;
+        }
+        .btn {
+            width: 120px;
+            height: 50px;
+            outline: none;
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            z-index: 0;
+            position: relative; 
+            padding: 12px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            
+     
+        }
+        .btn:before {
+           content: '';
+           background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+           position: absolute;
+           top: -2px;
+           left:-2px;;
+           background-size: 300%;
+           z-index: -1;
+           filter: blur(5px);
+           width: calc(100% + 4px);
+           height: calc(100% + 4px);
+           animation: glowing 20s linear infinite;
+           opacity: 0;
+           transition: opacity .3s ease-in-out;
+           border-radius: 10px;
+    }
+    .btn:active{
+        color:#000 
+    }
+    .btn:active:after {
+        background: transparent;
+    }
+    .btn:hover:before {
+        opacity: 1;
+    }
+    .btn:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 6px;
+        background: #111;
+        z-index: -1;
+    }
+    @keyframes glowing {
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 400% 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    } 
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Heart Disease Prediction</h1>
+        <p class="description">Enter the details below to check the likelihood of heart disease.</p>
+        
+        <form action="{{ url_for('predict') }}" method="post" id="prediction-form">
+            <div class="input-group">
+                <label for="Age">Age:</label>
+                <input type="number" id="Age" name="Age" required>
+            </div> <br>
+            <div class="input-group">
+                <label for="Sex">Sex (0 = Female, 1 = Male):</label>
+                <input type="number" id="Sex" name="Sex" required>
+            </div> <br>
+            <div class="input-group">
+                <label for="RestingBloodPressure">Resting Blood Pressure:</label>
+                <input type="number" id="RestingBloodPressure" name="RestingBloodPressure" required>
+            </div> <br>
+            <div class="input-group">
+                <label for="Cholesterol">Cholesterol Level:</label>
+                <input type="number" id="Cholesterol" name="Cholesterol" required>
+            </div><br>
+            <div class="input-group">
+                <label for="FastingBloodSugar">Fasting Blood Sugar (>120 mg/dl = 1, else 0):</label>
+                <input type="number" id="FastingBloodSugar" name="FastingBloodSugar" required>
+            </div><br>
+            <div class="input-group">
+                <label for="MaxHeartRate">Max Heart Rate:</label>
+                <input type="number" id="MaxHeartRate" name="MaxHeartRate" required>
+            </div><br>
+            <div class="input-group">
+                <label for="ExerciseInducedAngina">Exercise-Induced Angina (1 = Yes, 0 = No):</label>
+                <input type="number" id="ExerciseInducedAngina" name="ExerciseInducedAngina" required>
+            </div><br>
+            <div class="input-group">
+                <label for="OldPeak">OldPeak:</label>
+                <input type="number" id="OldPeak" name="OldPeak" step="any" required>
+            </div><br>
+            <div class="input-group">
+                <label for="nMajorVessels">Number of Major Vessels (0-4):</label>
+                <input type="number" id="nMajorVessels" name="nMajorVessels" required>
+            </div><br>
+            <!-- One-hot encoded ChestPain -->
+            <div class="input-group">
+                <label>Chest Pain Type (one-hot):</label>
+                <input type="number" name="ChestPain_0" min="0" max="1" required> 0
+                <input type="number" name="ChestPain_1" min="0" max="1" required> 1
+                <input type="number" name="ChestPain_2" min="0" max="1" required> 2
+                <input type="number" name="ChestPain_3" min="0" max="1" required> 3
+            </div><br>
+            <!-- One-hot encoded RestingECG -->
+            <div class="input-group">
+                <label>Resting ECG (one-hot):</label>
+                <input type="number" name="RestingECG_0" min="0" max="1" required> 0
+                <input type="number" name="RestingECG_1" min="0" max="1" required> 1
+                <input type="number" name="RestingECG_2" min="0" max="1" required> 2
+            </div><br>
+            <!-- One-hot encoded STSlope -->
+            <div class="input-group">
+                <label>ST Slope (one-hot):</label>
+                <input type="number" name="STSlope_0" min="0" max="1" required> 0
+                <input type="number" name="STSlope_1" min="0" max="1" required> 1
+                <input type="number" name="STSlope_2" min="0" max="1" required> 2
+            </div><br>
+            <!-- One-hot encoded Thalium -->
+            <div class="input-group">
+                <label>Thalium (one-hot):</label>
+                <input type="number" name="Thalium_0" min="0" max="1" required> 0
+                <input type="number" name="Thalium_1" min="0" max="1" required> 1
+                <input type="number" name="Thalium_2" min="0" max="1" required> 2
+                <input type="number" name="Thalium_3" min="0" max="1" required> 3
+            </div><br> 
+            <button type="submit" class="btn">Predict</button>
+        </form>
+        
+        <div id="result" class="result-box"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction Result</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class='container-heading'><span class="heading_font">Heart Disease Prediction Result</span></h2>
+
+        <div class="results">
+            {% if prediction == 1 %}
+                <h1><span class='danger'>Warning! <br><br> High Risk of Heart Disease.<br><br></span></h1>
+            {% elif prediction == 0 %}
+                <h1><span class='safe'>Good News! <br><br> Low Risk of Heart Disease.</span></h1>
+            {% endif %}
+        </div>
+
+        <a href="/" class="btn">Check Another Prediction</a>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .danger {
+            color: red;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .safe {
+            color: green;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ff7e5f;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #ff5733;
+        }
+    </style>
+</body>
+</html>
